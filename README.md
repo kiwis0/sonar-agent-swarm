@@ -1,26 +1,16 @@
 # sonar-agent-swarm
 
-A Flask-based tool to auto-fix SonarQube issues in GitHub repos using Claude.
+this tool that auto-fixes sonarqube issues in github repos. it listens for webhooks, uses claude to spit out fixes, and makes them into PRs. think autonomous agents, scalable queues, and clean execution. this is the start of something that can be simply added to someones project. 
 
-## Features
-- Listens for GitHub webhooks
-- Parses SonarQube issues
-- Generates fixes with Claude
-- Validates fixes
-- Creates PRs
-- Scales with multiprocessing
+## what it does
+- catches github issue webhooks for sonarqube stuff
+- parses issues like "SonarQube issue in main.py at line 10: unused var"
+- claude (anthropic api) generates a fix
+- validates it, then makes a PR
+- runs in docker with redis for queueing jobs
 
-## Setup
-1. Clone: `git clone https://github.com/yourusername/sonar-agent-swarm.git`
-2. Install: `pip install .`
-3. Copy `config.ini.example` to `config.ini` and configure it
-4. Run: `sonar-agent-swarm`
-
-## Configuration
-Edit `config.ini` or set env vars (e.g., `GITHUB_TOKEN`).
-
-## Usage
-Set a GitHub webhook to `http://your-server:port/webhook` with your secret. Create issues like "SonarQube issue in main.py at line 10: unused variable".
-
-## Scalability
-Uses a Queue and configurable workers to handle high demand.
+## setup
+1. clone this: `git clone https://github.com/kiwis0/sonar-agent-swarm.git`
+2. copy `.env.example` to `.env`, toss in your github token, webhook secret, repo name, anthropic key
+3. run `docker-compose up -d`
+4. fire up ngrok: `ngrok http 500` for local testing 
