@@ -11,7 +11,12 @@ class FixerAgent:
         self.client = Anthropic(api_key=get_config('ANTHROPIC_API_KEY'), http_client=httpx.Client())
 
     def fix(self, issue):
-        prompt = f"SonarQube issue in {issue['file']} at line {issue['line']}: \"{issue['desc']}\"\nProvide a Python fix. Return only the code block."
+        prompt = f"""You are an expert Python developer fixing a SonarQube issue. The entire codebase is available in your knowledge base (SonarAgentSwarmCodebase Project). Below is the issue, the affected file, and a snippet for focus. Use the full codebase context to propose a precise fix.
+
+                    ### Issue
+                    SonarQube issue in {issue['file']} at line {issue['line']}: {issue['desc']}
+                    
+                    \nProvide a Python fix. Return only the code block."""
         try:
             response = self.client.messages.create(
                 model="claude-3-7-sonnet-20250219x1",
